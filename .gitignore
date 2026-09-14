@@ -4,3 +4,9 @@
 # AI files
 *agent.md
 agent.md
+
+# Secrets
+.env
+
+# Other
+.venv
