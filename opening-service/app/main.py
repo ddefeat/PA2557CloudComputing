@@ -1,6 +1,15 @@
+"""Main function for the chess openings microservice.
+
+Routes:
+- /
+- /health
+- /api/openings ; returns an opening
+- /api/openings{id} ; returns an opening by id
+"""
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
-from app.db import check_database, close_pool, open_pool
+from app.db import check_database, close_pool, open_pool, get_openings, get_opening_by_id
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -37,10 +46,12 @@ def health():
           "database": "ok",
       }
 
-@app.get("api/openings")
+@app.get("/api/openings")
 def openings():
-    pass
+    # return the full list of openings
+    return get_openings()
 
-@app.get("api/openings{id}")
-def openings_by_id():
-    pass
+@app.get("/api/openings{id}")
+def openings_by_id(id: int):
+    # return a specific opening
+    return get_opening_by_id(id)
