@@ -37,8 +37,11 @@ def get_openings() -> list[tuple]:
                   rows = cursor.fetchall()
                   return rows
 
-def get_opening_by_id(id:int) -> list[tuple]:
+def get_opening_by_id(id: int) -> list[tuple]:
     """Return a specfic opening by id"""
+    if not isinstance(id, int) or isinstance(id, bool):
+        return []
+
     with pool.connection() as connection:
                   with connection.cursor() as cursor:
                       cursor.execute("SELECT id, title, pgn, moves FROM openings WHERE id = %s",(id,))
@@ -48,5 +51,5 @@ def get_opening_by_id(id:int) -> list[tuple]:
 
 # local testing
 open_pool()
-print(get_opening_by_id("1"))
+print(get_opening_by_id(-1))
 close_pool

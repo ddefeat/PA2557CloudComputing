@@ -10,3 +10,7 @@ agent.md
 
 # Other
 .venv
+
+# Python bytecode
+__pycache__/
+*.pyc
