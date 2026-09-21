@@ -4,7 +4,7 @@ from psycopg_pool import ConnectionPool
 # Constants
 DATABASE_URL = os.getenv(
       "DATABASE_URL",
-      "postgresql://chessuser:chesspassword@localhost:5433/chessdb",
+      "postgresql://postgres:postgres@chess-db:5432/chess",
 )
 
 pool = ConnectionPool(
@@ -50,6 +50,6 @@ def get_opening_by_id(id: int) -> list[tuple]:
 
 
 # local testing
-open_pool()
-print(get_opening_by_id(-1))
-close_pool
+# open_pool()
+# print(get_opening_by_id(-1))
+# close_pool
