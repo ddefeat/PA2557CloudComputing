@@ -9,6 +9,7 @@ Routes:
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from app.db import check_database, close_pool, open_pool, get_openings, get_opening_by_id
 
 @asynccontextmanager
@@ -21,6 +22,13 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Opening Service",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # routes
