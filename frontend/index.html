@@ -8,6 +8,11 @@
     <button id="btn1">click for openings</button>
     <div id="out1"></div>
 
+    <h2>search opening by id</h2>
+    id: <input type="text" id="open_id">
+    <button id="btn1b">search</button>
+    <div id="out1b"></div>
+
     <h1>games</h1>
     <button id="btn2">get games</button>
     <div id="out2"></div>
@@ -32,6 +37,16 @@
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("out1").innerHTML = data;
+                });
+        }
+
+        // button 1b - search opening by id
+        document.getElementById("btn1b").onclick = function() {
+            var id = document.getElementById("open_id").value;
+            fetch(openingService + "/api/openings/" + id)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("out1b").innerHTML = data;
                 });
         }
 
