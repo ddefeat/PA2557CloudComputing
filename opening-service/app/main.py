@@ -51,7 +51,7 @@ def openings():
     # return the full list of openings
     return get_openings()
 
-@app.get("/api/openings{id}")
+@app.get("/api/openings/{id}")
 def openings_by_id(id: int):
     # return a specific opening
     return get_opening_by_id(id)

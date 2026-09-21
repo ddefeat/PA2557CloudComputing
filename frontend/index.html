@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>chess stuff</title>
+</head>
+<body>
+    <h1>openings</h1>
+    <button id="btn1">click for openings</button>
+    <div id="out1"></div>
+
+    <h1>games</h1>
+    <button id="btn2">get games</button>
+    <div id="out2"></div>
+
+    <h2>add game</h2>
+    white: <input type="text" id="white"><br>
+    black: <input type="text" id="black"><br>
+    result: <input type="text" id="res"><br>
+    moves: <input type="text" id="moves"><br>
+    date: <input type="text" id="date"><br>
+    <button id="btn3">submit</button>
+    <div id="out3"></div>
+
+    <script>
+        // hardcoded ports for now :)
+        var openingService = "http://localhost:8000";
+        var gameService = "http://localhost:8001";
+
+        // button 1 - get openings
+        document.getElementById("btn1").onclick = function() {
+            fetch(openingService + "/api/openings")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("out1").innerHTML = data;
+                });
+        }
+
+        // button 2 - get all games
+        document.getElementById("btn2").onclick = function() {
+            fetch(gameService + "/get_game")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("out2").innerHTML = data;
+                });
+        }
+
+        // button 3 - add new game
+        document.getElementById("btn3").onclick = function() {
+            var w = document.getElementById("white").value;
+            var b = document.getElementById("black").value;
+            var r = document.getElementById("res").value;
+            var m = document.getElementById("moves").value;
+            var d = document.getElementById("date").value;
+
+            var x = {
+                p1: w,
+                p2: b,
+                result: r,
+                moves: m,
+                date: d
+            };
+
+            fetch(gameService + "/add_game", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(x)
+            })
+            .then(resp => resp.json())
+            .then(data => {
+                document.getElementById("out3").innerHTML = JSON.stringify(data);
+            });
+        }
+    </script>
+</body>
+</html>
