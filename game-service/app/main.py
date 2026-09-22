@@ -45,7 +45,7 @@ def health():
         "status": "ok",
     }
 
-@app.post("/add_game")
+@app.post("/api/games")
 def add_game(game: GameRequest):
     id = add_game_to_db(game.moves, game.p1, game.p2, game.result, game.date)
     if id != -1:
@@ -53,7 +53,7 @@ def add_game(game: GameRequest):
     return {"status": "failed"}
 
 
-@app.get("/get_game/{id}")
+@app.get("/api/games/{id}")
 def _get_game(id: int):
     game = get_game_by_id(id)
     if game:
@@ -61,6 +61,6 @@ def _get_game(id: int):
     return {"status": "not found"}
 
 
-@app.get("/get_game")
+@app.get("/api/games")
 def _get_all_games():
     return get_all_games()

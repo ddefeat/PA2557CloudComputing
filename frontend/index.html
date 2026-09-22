@@ -27,13 +27,9 @@
     <div id="out3"></div>
 
     <script>
-        // hardcoded ports for now :)
-        var openingService = "http://localhost:8000";
-        var gameService = "http://localhost:8001";
-
         // button 1 - get openings
         document.getElementById("btn1").onclick = function() {
-            fetch(openingService + "/api/openings")
+            fetch("/api/openings")
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("out1").innerHTML = data;
@@ -43,7 +39,7 @@
         // button 1b - search opening by id
         document.getElementById("btn1b").onclick = function() {
             var id = document.getElementById("open_id").value;
-            fetch(openingService + "/api/openings/" + id)
+            fetch("/api/openings/" + id)
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("out1b").innerHTML = data;
@@ -52,7 +48,7 @@
 
         // button 2 - get all games
         document.getElementById("btn2").onclick = function() {
-            fetch(gameService + "/get_game")
+            fetch("/api/games")
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("out2").innerHTML = data;
@@ -75,7 +71,7 @@
                 date: d
             };
 
-            fetch(gameService + "/add_game", {
+            fetch("/api/games", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
