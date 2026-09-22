@@ -69,3 +69,156 @@ spec:
         resources:
           requests:
             storage: 1Gi
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opening-service
+  labels:
+    app: opening-service
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: opening-service
+
+  template:
+    metadata:
+      labels:
+        app: opening-service
+
+    spec:
+      containers:
+        - name: opening-service
+          image: litebertia/opening-service:latest
+
+          ports:
+            - containerPort: 8000
+              name: http-port
+
+          env:
+            - name: DATABASE_URL
+              value: postgresql://postgres:postgres@chess-db:5432/chess
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: opening-service
+  labels:
+    app: opening-service
+
+spec:
+  selector:
+    app: opening-service
+
+  ports:
+    - port: 8000
+      targetPort: http-port
+
+  type: ClusterIP
+
+---
+  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game-service
+  labels:
+    app: game-service
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: game-service
+
+  template:
+    metadata:
+      labels:
+        app: game-service
+
+    spec:
+      containers:
+        - name: game-service
+          image: litebertia/game-service:latest
+
+          ports:
+            - containerPort: 8001
+              name: http-port
+
+          env:
+            - name: DATABASE_URL
+              value: postgresql://postgres:postgres@chess-db:5432/chess
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: game-service
+  labels:
+    app: game-service
+
+spec:
+  selector:
+    app: game-service
+
+  ports:
+    - port: 8001
+      targetPort: http-port
+
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chess-frontend
+  labels:
+    app: chess-frontend
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: chess-frontend
+
+  template:
+    metadata:
+      labels:
+        app: chess-frontend
+
+    spec:
+      containers:
+        - name: chess-frontend
+          image: litebertia/chess-frontend:latest
+
+          ports:
+            - containerPort: 80
+              name: http-port
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: chess-frontend
+
+spec:
+  type: LoadBalancer
+
+  selector:
+    app: chess-frontend
+
+  ports:
+    - port: 80
+      targetPort: http-port
