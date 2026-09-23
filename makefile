@@ -9,14 +9,10 @@ kube-start:
 	minikube status >/dev/null 2>&1 || minikube start --cpus=4 --memory=3000
 
 push:
-	docker build -t $(DOCKER_USER)/chess-frontend:latest ./frontend
-	docker build -t $(DOCKER_USER)/opening-service:latest ./opening-service
-	docker build -t $(DOCKER_USER)/game-service:latest ./game-service
-	docker build -t $(DOCKER_USER)/chess-db:latest ./database
-	docker push $(DOCKER_USER)/chess-frontend:latest
-	docker push $(DOCKER_USER)/opening-service:latest
-	docker push $(DOCKER_USER)/game-service:latest
-	docker push $(DOCKER_USER)/chess-db:latest
+	docker buildx build --platform linux/amd64,linux/arm64 -t $(DOCKER_USER)/chess-frontend:latest --push ./frontend
+	docker buildx build --platform linux/amd64,linux/arm64 -t $(DOCKER_USER)/opening-service:latest --push ./opening-service
+	docker buildx build --platform linux/amd64,linux/arm64 -t $(DOCKER_USER)/game-service:latest --push ./game-service
+	docker buildx build --platform linux/amd64,linux/arm64 -t $(DOCKER_USER)/chess-db:latest --push ./database
 
 deploy:
 	kubectl apply -f kubernetes.yml
